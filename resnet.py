@@ -3,7 +3,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import pt_util
 
 def initialize_weights(module):
     if isinstance(module, nn.Conv2d):
@@ -168,6 +168,9 @@ class Network(nn.Module):
         # initialize weights
         self.apply(initialize_weights)
 
+        # accuracy
+        self.accuracy = 0
+
     def _make_stage(self, in_channels, out_channels, n_blocks, block, stride):
         stage = nn.Sequential()
         for index in range(n_blocks):
@@ -194,3 +197,17 @@ class Network(nn.Module):
         x = x.view(x.size(0), -1)
         x = self.fc(x)
         return x
+
+    def save_model(self, file_path, num_to_keep=1):
+        pt_util.save(self, file_path, num_to_keep)
+        
+    def save_best_model(self, accuracy, file_path, num_to_keep=1):
+        if (accuracy > self.accuracy):
+          self.save_model(file_path, num_to_keep)
+          self.accuracy = accuracy
+
+    def load_model(self, file_path):
+        pt_util.restore(self, file_path)
+
+    def load_last_model(self, dir_path):
+        return pt_util.restore_latest(self, dir_path)
