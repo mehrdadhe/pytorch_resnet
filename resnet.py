@@ -199,6 +199,7 @@ class Network(nn.Module):
         return x
 
     def save_model(self, file_path, num_to_keep=1):
+        print("Saving the model!")
         pt_util.save(self, file_path, num_to_keep)
         
     def save_best_model(self, accuracy, file_path, num_to_keep=1):
