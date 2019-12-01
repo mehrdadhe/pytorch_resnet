@@ -199,7 +199,6 @@ class Network(nn.Module):
         return x
 
     def save_model(self, file_path, num_to_keep=1):
-        print("Saving the model!")
         pt_util.save(self, file_path, num_to_keep)
         
     def save_best_model(self, accuracy, file_path, num_to_keep=1):
@@ -212,3 +211,11 @@ class Network(nn.Module):
 
     def load_last_model(self, dir_path):
         return pt_util.restore_latest(self, dir_path)
+
+    def save_state(self, file_path, state):
+        pt_util.write_log(filename=file_path, data=state)
+
+    def load_state(self, file_path, state):
+        return pt_util.read_log(filename=file_path)
+
+
