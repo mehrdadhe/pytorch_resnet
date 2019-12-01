@@ -170,6 +170,7 @@ class Network(nn.Module):
 
         # accuracy
         self.accuracy = 0
+        self.states = {}
 
     def _make_stage(self, in_channels, out_channels, n_blocks, block, stride):
         stage = nn.Sequential()
@@ -212,10 +213,13 @@ class Network(nn.Module):
     def load_last_model(self, dir_path):
         return pt_util.restore_latest(self, dir_path)
 
-    def save_state(self, file_path, state):
-        pt_util.write_log(filename=file_path, data=state)
+    def save_state(self, file_path):
+        self.states["best_accuracy"] = self.accuracy
+        pt_util.write_log(filename=file_path, data=states)
 
-    def load_state(self, file_path, state):
-        return pt_util.read_log(filename=file_path)
+    def load_state(self, file_path):
+        self.states = pt_util.read_log(filename=file_path)
+        self.accuracy = self.states["best_accuracy"]
+        return self.states
 
 
