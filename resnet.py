@@ -219,7 +219,8 @@ class Network(nn.Module):
 
     def load_state(self, file_path):
         self.state = pt_util.read_log(filename=file_path)
-        self.accuracy = self.state["best_accuracy"]
+        if self.state:
+            self.accuracy = self.state["best_accuracy"]
         return self.state
 
 
