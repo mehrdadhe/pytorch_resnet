@@ -218,9 +218,12 @@ class Network(nn.Module):
         pt_util.write_log(filename=file_path, data=self.state)
 
     def load_state(self, file_path):
-        self.state = pt_util.read_log(filename=file_path)
-        if self.state:
+        state = pt_util.read_log(filename=file_path) 
+        if state:
+            self.state = state
             self.accuracy = self.state["best_accuracy"]
+        else:
+            self.state = {}
         return self.state
 
 
